@@ -5,7 +5,7 @@ function App() {
     const [task, setTask] = useState('');       
     const [tasksList, setTasksList] = useState([]); 
 
-    const handleAddTask = (event) => {
+    const addTask = (event) => {
         if (task && event.key == "Enter") {
             setTasksList([...tasksList, task]); 
             setTask('');                        
@@ -24,7 +24,7 @@ function App() {
     return (
         <div className="container">
             <div className="row">
-                <h1 className='title'>Todo List</h1>
+                <h1 className='title'>To-Do List</h1>
                 <div className='col-12 p-0'>
                     <input
                         type="text"
@@ -32,7 +32,7 @@ function App() {
                         placeholder="What needs to be done?"
                         value={task}
                         onChange={e => taskChange(e)}
-                        onKeyUp={e => handleAddTask(e)}
+                        onKeyUp={e => addTask(e)}
                     />
                 </div>
                 <ul className="list-group col-8 p-0">
