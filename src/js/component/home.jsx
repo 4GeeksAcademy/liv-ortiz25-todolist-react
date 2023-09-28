@@ -1,13 +1,58 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 
-function App() {
+const App =() => {
     const [task, setTask] = useState('');       
     const [tasksList, setTasksList] = useState([]); 
+    const url = "https://playground.4geeks.com/apis/fake/todos/user/elizaduarte";
+
+    function fetchInfo () {
+        fetch(url, {
+            method: "GET",
+            body: JSON.stringify([]),
+            headers: {
+                "Content-Type": "application/json"
+            }
+            })
+        .then((response) => response.json())
+        .then((data) => setTask(data))
+    }
+
+    function createUsername () {
+        fetch(url, {
+            method: "POST",
+            body: JSON.stringify([]),
+            headers: {
+                "Content-Type": "application/json"
+            }
+            })
+        .then((response) => response.json())
+        .then((data) => {return data})
+    }
+
+    function modifyTask () {
+            fetch(url, {
+                method: "PUT",
+                body: JSON.stringify(),
+                headers: {
+                    "Content-Type": "application/json"
+                }
+            })
+            .then((response) => response.json())
+            .then((data) => console.log(data))
+
+    }
+
+    useEffect( () =>{
+        fetchInfo();
+        createUsername();
+    }, [])
+
 
     const addTask = (event) => {
         if (task && event.key == "Enter") {
             setTasksList([...tasksList, task]); 
+            modifyTask ([...tasksList, task])
             setTask('');                        
         }
     };
@@ -17,8 +62,9 @@ function App() {
     }
 
     const deleteTask = (index) => {
-        const newList = tasksList.filter((value, i) => i !== index)
+        const newList = tasksList.filter((index, i) => i !== index)
         setTasksList(newList)
+        modifyTask (newList)
     }
 
     return (
@@ -45,7 +91,7 @@ function App() {
                                 onClick={e => deleteTask(index)}
                                 style={{ border: 'none', background: 'none', padding: 0, cursor: 'pointer' }}
                             >
-                                <i class="far fa-trash-alt"></i>
+                                <i className="far fa-trash-alt"></i>
                             </button>
                         </li>
                     ))}
