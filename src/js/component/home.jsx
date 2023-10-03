@@ -1,71 +1,75 @@
-import React, { useState, useEffect } from "react";
+import React, { useState} from "react";
 
 
-const App =() => {
-    const [task, setTask] = useState('');       
+const Home =() => {
+    const [task, setTasks] = useState('');       
     const [tasksList, setTasksList] = useState([]); 
-    const url = "https://playground.4geeks.com/apis/fake/todos/user/elizaduarte";
 
-    function fetchInfo () {
-        fetch(url, {
-            method: "GET",
-            body: JSON.stringify([]),
-            headers: {
-                "Content-Type": "application/json"
-            }
-            })
-        .then((response) => response.json())
-        .then((data) => setTask(data))
-    }
+    window.onload = function createUser (e) {
+        e.preventDefault();
+        console.log('crear usuario')
+        const requestOptions = {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify( [] )
+      };
+        fetch('https://playground.4geeks.com/apis/fake/todos/user/elizaduarte', requestOptions)
+        .then( (response) => response.json() )
+        .then( (data) => console.log(data) )
+      }
 
-    function createUsername () {
-        fetch(url, {
-            method: "POST",
-            body: JSON.stringify([]),
-            headers: {
-                "Content-Type": "application/json"
-            }
-            })
-        .then((response) => response.json())
-        .then((data) => {return data})
-    }
+      function getTask () {
+        console.log('leer tareas')
+        fetch('https://playground.4geeks.com/apis/fake/todos/user/elizaduarte')
+        .then( (response) => response.json() )
+        .then( (data) => console.log(data) )
+      }
 
-    function modifyTask () {
-            fetch(url, {
-                method: "PUT",
-                body: JSON.stringify(),
-                headers: {
-                    "Content-Type": "application/json"
-                }
-            })
-            .then((response) => response.json())
-            .then((data) => console.log(data))
+      function addTask (e) {
+          e.preventDefault();  
+          //setTasksList('');
+          console.log(tasksList)
+          console.log(task)
 
-    }
-
-    useEffect( () =>{
-        fetchInfo();
-        createUsername();
-    }, [])
-
-
-    const addTask = (event) => {
-        if (task && event.key == "Enter") {
-            setTasksList([...tasksList, task]); 
-            modifyTask ([...tasksList, task])
-            setTask('');                        
+          const requestOptions = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(
+              [{ task }]
+            )
         }
-    };
+          
+          console.log('Agregar tarea')
+          fetch('https://playground.4geeks.com/apis/fake/todos/user/elizaduarte', requestOptions)
+          .then( (response) => response.json() )
+          .then( (data) => console.log(data) )
 
-    const taskChange = (event) => {
-        setTask(event.target.value)
-    }
+          
+        }
 
-    const deleteTask = (index) => {
-        const newList = tasksList.filter((index, i) => i !== index)
-        setTasksList(newList)
-        modifyTask (newList)
-    }
+      const deleteTask = (index) => {     
+
+          const newList = [...task];
+          newList.splice(index,1);
+          setTasks(newList);
+          
+
+          const requestOptions = {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(
+              
+               newList
+              
+            )
+          };
+          
+          fetch('https://playground.4geeks.com/apis/fake/todos/user/elizaduarte', requestOptions)
+          .then( (response) => response.json() )
+          .then( (data) => console.log(data) )
+        
+      }
+
 
     return (
         <div className="container">
@@ -77,7 +81,7 @@ const App =() => {
                         className="form-control"
                         placeholder="What needs to be done?"
                         value={task}
-                        onChange={e => taskChange(e)}
+                        onChange={e => getTask(e)}
                         onKeyUp={e => addTask(e)}
                     />
                 </div>
@@ -88,7 +92,7 @@ const App =() => {
                             className="list-group-item d-flex justify-content-between">
                             <span>{task}</span>
                             <button
-                                onClick={e => deleteTask(index)}
+                                onClick={_e => deleteTask(index)}
                                 style={{ border: 'none', background: 'none', padding: 0, cursor: 'pointer' }}
                             >
                                 <i className="far fa-trash-alt"></i>
@@ -110,4 +114,4 @@ const App =() => {
     );
 }
 
-export default App;
+export default Home;
