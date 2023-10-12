@@ -14,7 +14,7 @@ function Home() {
     const addTask = () => {
       if (newTask.trim() !== '') {
         fetch('https://playground.4geeks.com/apis/fake/todos/user/elizaduarte', {
-          method: 'PUT',
+          method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
@@ -50,6 +50,7 @@ function Home() {
                         onChange={(e) => setNewTask(e.target.value)}
                         onKeyUp={e => addTask(e)}
                     />
+                    
                 </div>
                 <ul className="list-group col-8 p-0">
                     {Array.isArray(tasks) && tasks.map((tasks, index) => (
@@ -57,7 +58,6 @@ function Home() {
                             key={index}
                             className="list-group-item d-flex justify-content-between">
                             <span>{tasks.label}</span>
-                            <span>{tasks.done}</span>
                             <button
                                 onClick={() => deleteTask(index)}
                                 style={{ border: 'none', background: 'none', padding: 0, cursor: 'pointer' }}
